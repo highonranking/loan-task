@@ -1,274 +1,28 @@
 import React, { useState } from "react";
-import { Table, Space, Input, Button, Select, Tag } from "antd";
+import { Table, Input, Button, Select } from "antd";
 import {
-  UserOutlined,
   MobileOutlined,
-  CalendarOutlined,
-  DollarOutlined,
-  CheckCircleFilled,
-  CloseCircleFilled,
   RightOutlined,
   FilterOutlined,
   PlusOutlined,
-  ArrowRightOutlined,
+  CheckCircleFilled,
+  CloseCircleFilled,
 } from "@ant-design/icons";
 
 import moment from "moment";
 import SideModal from "./SideModal";
-
+import { data as initialData } from "../constants/Claims";
 import iPhoneImage from "../assets/iphone.png";
-import {
-  CaretDown,
-  MagnifyingGlass,
-  NewspaperClipping,
-} from "@phosphor-icons/react";
-
-const data = [
-  {
-    key: "1",
-    employeeName: "Aditya Garikapati",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Software Engineer",
-    device: "iPhone 15",
-    addson: 0,
-    requestedOn: "2024-04-12",
-    amountPayable: 13124,
-    amountDurationInMonths: 6,
-    status: "approved",
-  },
-  {
-    key: "2",
-    employeeName: "Aryan Joshi",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Consultant",
-    device: "iPhone 15",
-    addson: 2,
-    requestedOn: "2024-04-10",
-    amountPayable: 19354,
-    amountDurationInMonths: 6,
-    status: "pending",
-  },
-  {
-    key: "3",
-    employeeName: "Sunita Reddy",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Business Analyst",
-    device: "iPhone 15",
-    addson: 0,
-    requestedOn: "2024-04-08",
-    amountPayable: 11982,
-    amountDurationInMonths: 6,
-    status: "approved",
-  },
-  {
-    key: "4",
-    employeeName: "Rajesh Kumar",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Product Manager",
-    device: "iPhone 15",
-    addson: 1,
-    requestedOn: "2024-04-06",
-    amountPayable: 14500,
-    amountDurationInMonths: 6,
-    status: "rejected",
-  },
-  {
-    key: "5",
-    employeeName: "Meera Singh",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "UI/UX Designer",
-    device: "iPhone 15",
-    addson: 3,
-    requestedOn: "2024-04-04",
-    amountPayable: 21000,
-    amountDurationInMonths: 6,
-    status: "approved",
-  },
-  {
-    key: "6",
-    employeeName: "Rohit Sharma",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Data Scientist",
-    device: "iPhone 15",
-    addson: 0,
-    requestedOn: "2024-04-02",
-    amountPayable: 13500,
-    amountDurationInMonths: 6,
-    status: "pending",
-  },
-  {
-    key: "7",
-    employeeName: "Pooja Patel",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "DevOps Engineer",
-    device: "iPhone 15",
-    addson: 1,
-    requestedOn: "2024-03-30",
-    amountPayable: 15000,
-    amountDurationInMonths: 6,
-    status: "approved",
-  },
-  {
-    key: "8",
-    employeeName: "Anil Choudhary",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Backend Developer",
-    device: "iPhone 15",
-    addson: 2,
-    requestedOn: "2024-03-28",
-    amountPayable: 18500,
-    amountDurationInMonths: 6,
-    status: "rejected",
-  },
-  {
-    key: "9",
-    employeeName: "Kavita Rao",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Frontend Developer",
-    device: "iPhone 15",
-    addson: 0,
-    requestedOn: "2024-03-26",
-    amountPayable: 12000,
-    amountDurationInMonths: 6,
-    status: "approved",
-  },
-  {
-    key: "10",
-    employeeName: "Vikas Gupta",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "QA Engineer",
-    device: "iPhone 15",
-    addson: 1,
-    requestedOn: "2024-03-24",
-    amountPayable: 14000,
-    amountDurationInMonths: 6,
-    status: "pending",
-  },
-  {
-    key: "11",
-    employeeName: "Priya Desai",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "HR Manager",
-    device: "iPhone 15",
-    addson: 3,
-    requestedOn: "2024-03-22",
-    amountPayable: 21500,
-    amountDurationInMonths: 6,
-    status: "approved",
-  },
-  {
-    key: "12",
-    employeeName: "Suresh Iyer",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Marketing Specialist",
-    device: "iPhone 15",
-    addson: 0,
-    requestedOn: "2024-03-20",
-    amountPayable: 13000,
-    amountDurationInMonths: 6,
-    status: "rejected",
-  },
-  {
-    key: "13",
-    employeeName: "Deepika Nair",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Content Writer",
-    device: "iPhone 15",
-    addson: 2,
-    requestedOn: "2024-03-18",
-    amountPayable: 17800,
-    amountDurationInMonths: 6,
-    status: "approved",
-  },
-  {
-    key: "14",
-    employeeName: "Amit Singh",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Sales Manager",
-    device: "iPhone 15",
-    addson: 1,
-    requestedOn: "2024-03-16",
-    amountPayable: 14500,
-    amountDurationInMonths: 6,
-    status: "pending",
-  },
-  {
-    key: "15",
-    employeeName: "Neha Mehta",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Operations Manager",
-    device: "iPhone 15",
-    addson: 3,
-    requestedOn: "2024-03-14",
-    amountPayable: 22000,
-    amountDurationInMonths: 6,
-    status: "approved",
-  },
-  {
-    key: "16",
-    employeeName: "Vijay Rathore",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Network Engineer",
-    device: "iPhone 15",
-    addson: 0,
-    requestedOn: "2024-03-12",
-    amountPayable: 13500,
-    amountDurationInMonths: 6,
-    status: "approved",
-  },
-  {
-    key: "17",
-    employeeName: "Kiran Kulkarni",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Cloud Engineer",
-    device: "iPhone 15",
-    addson: 2,
-    requestedOn: "2024-03-10",
-    amountPayable: 19000,
-    amountDurationInMonths: 6,
-    status: "rejected",
-  },
-  {
-    key: "18",
-    employeeName: "Anjali Verma",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "SEO Specialist",
-    device: "iPhone 15",
-    addson: 0,
-    requestedOn: "2024-03-08",
-    amountPayable: 13200,
-    amountDurationInMonths: 6,
-    status: "approved",
-  },
-  {
-    key: "19",
-    employeeName: "Arjun Patil",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "System Admin",
-    device: "iPhone 15",
-    addson: 1,
-    requestedOn: "2024-03-06",
-    amountPayable: 14800,
-    amountDurationInMonths: 6,
-    status: "pending",
-  },
-  {
-    key: "20",
-    employeeName: "Suman Jain",
-    employeePhoto: "https://xsgames.co/randomusers/avatar.php?g=male",
-    designation: "Support Engineer",
-    device: "iPhone 15",
-    addson: 3,
-    requestedOn: "2024-03-04",
-    amountPayable: 22500,
-    amountDurationInMonths: 6,
-    status: "approved",
-  },
-];
+import { CaretDown, NewspaperClipping } from "@phosphor-icons/react";
 
 const Claims = () => {
+  const [data, setData] = useState(initialData);
   const [selectedRow, setSelectedRow] = useState(null);
   const [showSideModal, setShowSideModal] = useState(false);
+  const [filteredInfo, setFilteredInfo] = useState({});
+  const [sortedInfo, setSortedInfo] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [editingStatusKey, setEditingStatusKey] = useState(null);
 
   const handleRowClick = (row) => {
     setSelectedRow(row);
@@ -278,9 +32,6 @@ const Claims = () => {
   const handleCloseModal = () => {
     setShowSideModal(false);
   };
-  const [filteredInfo, setFilteredInfo] = useState({});
-  const [sortedInfo, setSortedInfo] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
 
   const handleFilterChange = (pagination, filters, sorter) => {
     setFilteredInfo(filters);
@@ -291,9 +42,12 @@ const Claims = () => {
     setCurrentPage(page);
   };
 
-  const handleRowDetailClick = (record) => {
-    // Logic to handle row detail click
-    console.log("Opening details for row:", record);
+  const handleStatusChange = (record, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.key === record.key ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+    setEditingStatusKey(null);
   };
 
   const filteredData = filteredInfo.employeeName
@@ -410,21 +164,35 @@ const Claims = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (text) => (
-        <div className="flex space-x-2.5 items-center justify-between w-1/6 py-0.5">
-          <div className="flex space-x-2 items-center justify-center px-2 py-1.5 bg-white shadow border rounded-lg border-gray-100">
-            <div className="flex space-x-1.5 items-center justify-center">
-              {text === "approved" ? (
-                <CheckCircleFilled style={{ color: "#52c41a" }} />
-              ) : (
-                <CloseCircleFilled style={{ color: "#f5222d" }} />
-              )}
-              <p className="text-xs font-semibold leading-tight text-gray-700">
-                {text === "approved" ? "Approved" : "Rejected"}
-              </p>
+      render: (text, record) => (
+        <div
+          className="flex space-x-2.5 items-center justify-between w-1/6 py-0.5"
+          onClick={() => setEditingStatusKey(record.key)}
+        >
+          {editingStatusKey === record.key ? (
+            <Select
+              value={text}
+              onChange={(value) => handleStatusChange(record, value)}
+              style={{ width: 120 }}
+            >
+              <Select.Option value="approved">Approved</Select.Option>
+              <Select.Option value="rejected">Rejected</Select.Option>
+            </Select>
+          ) : (
+            <div className="flex space-x-2 items-center justify-center px-2 py-1.5 bg-white shadow border rounded-lg border-gray-100 cursor-pointer">
+              <div className="flex space-x-1.5 items-center justify-center">
+                {text === "approved" ? (
+                  <CheckCircleFilled style={{ color: "#52c41a" }} />
+                ) : (
+                  <CloseCircleFilled style={{ color: "#f5222d" }} />
+                )}
+                <p className="text-xs font-semibold leading-tight text-gray-700">
+                  {text === "approved" ? "Approved" : "Rejected"}
+                </p>
+              </div>
+              <CaretDown style={{ marginLeft: "8px" }} />
             </div>
-            <CaretDown style={{ marginLeft: "8px" }} />
-          </div>
+          )}
         </div>
       ),
     },
